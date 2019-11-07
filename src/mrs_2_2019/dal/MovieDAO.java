@@ -40,7 +40,7 @@ public class MovieDAO
             } else
             {
                 //TODO create movie from line of text!!!
-                System.out.println(aLineOfText);
+                
             }
         }
 

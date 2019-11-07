@@ -5,16 +5,20 @@
  */
 package mrs_2_2019.gui;
 
+import java.io.IOException;
 import mrs_2_2019.be.Movie;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import mrs_2_2019.dal.MovieDAO;
 
 /**
  *
@@ -31,14 +35,16 @@ public class FXMLDocumentController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        ArrayList<Movie> allMovies = new ArrayList<>();
-        
-        allMovies.add(new Movie(1, "Det forsømte forår", 1983));
-        
-        //GET DATA FROM FILE
-        
-        ObservableList<Movie> obsAllMovies =  FXCollections.observableArrayList(allMovies);
-        lstView.setItems(obsAllMovies);
+        try
+        {
+            MovieDAO movieDao = new MovieDAO();
+            List<Movie> allMovies = movieDao.getAllMovies();    
+            ObservableList<Movie> obsAllMovies =  FXCollections.observableArrayList(allMovies);
+            lstView.setItems(obsAllMovies);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
 }
