@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import mrs_2_2019.be.Movie;
 
@@ -28,6 +29,8 @@ public class MovieDAO
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
 
+        List<Movie> allMovies = new ArrayList<>();
+
         while (true)
         {
             String aLineOfText = br.readLine();
@@ -36,16 +39,12 @@ public class MovieDAO
                 break;
             } else
             {
+                //TODO create movie from line of text!!!
                 System.out.println(aLineOfText);
             }
         }
-        return null;
-    }
 
-    public static void main(String[] args) throws IOException
-    {
-        MovieDAO movieDao = new MovieDAO();
-        movieDao.getAllMovies();
+        return allMovies;
     }
 
 }
