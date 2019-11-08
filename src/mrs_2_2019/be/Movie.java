@@ -73,4 +73,12 @@ public class Movie
         return id;
     }
 
+    @Override
+    public String toString()
+    {
+        return title + " (" + year + ")";
+    }
+    
+    
+
 }
