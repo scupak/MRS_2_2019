@@ -41,9 +41,10 @@ public class FXMLDocumentController implements Initializable
             List<Movie> allMovies = movieDao.getAllMovies();    
             ObservableList<Movie> obsAllMovies =  FXCollections.observableArrayList(allMovies);
             lstView.setItems(obsAllMovies);
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Ooops");
+            ex.printStackTrace();
         }
     }    
     
