@@ -57,5 +57,12 @@ public class MovieDAO
         }
 
     }
+    
+    public static void main(String[] args) throws IOException
+    {
+        MovieDAO movieDao = new MovieDAO();
+        movieDao.getAllMovies();
+    }
+    
 
 }
