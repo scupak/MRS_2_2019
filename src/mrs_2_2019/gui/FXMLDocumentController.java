@@ -18,7 +18,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import mrs_2_2019.dal.MovieDAO;
+import mrs_2_2019.gui.model.MovieModel;
 
 /**
  *
@@ -26,26 +29,42 @@ import mrs_2_2019.dal.MovieDAO;
  */
 public class FXMLDocumentController implements Initializable
 {
+    private MovieModel movieModel;
     
     @FXML
     private Label label;
     @FXML
     private ListView<Movie> lstView;
+    @FXML
+    private TextField txtMovieSearch;
+    
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         try
         {
-            MovieDAO movieDao = new MovieDAO();
-            List<Movie> allMovies = movieDao.getAllMovies();    
-            ObservableList<Movie> obsAllMovies =  FXCollections.observableArrayList(allMovies);
-            lstView.setItems(obsAllMovies);
+            movieModel = new MovieModel();
+            lstView.setItems(movieModel.getAllMovies());
         } catch (Exception ex)
         {
             System.out.println("Ooops");
             ex.printStackTrace();
         }
     }    
+
+    @FXML
+    private void handleMovieSearch(KeyEvent event)
+    {
+        try
+        {
+            String query = txtMovieSearch.getText().trim();
+            movieModel.search(query);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
     
 }
