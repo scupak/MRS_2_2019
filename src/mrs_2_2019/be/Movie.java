@@ -78,7 +78,20 @@ public class Movie
     {
         return title + " (" + year + ")";
     }
-    
-    
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Movie)
+        {
+            //Obj is a movie
+            Movie other = (Movie) obj;
+            return (this.id == other.getId());
+        } else
+        {
+            //Obj is not a movie
+            return super.equals(obj);
+        }
+    }
 
 }

@@ -6,14 +6,13 @@
 package mrs_2_2019.dal;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mrs_2_2019.be.Movie;
 
 /**
@@ -62,10 +61,31 @@ public class MovieDAO
         }
     }
 
+    public void deleteMovie(Movie movie) throws IOException
+    {
+        List<Movie> allMovies = getAllMovies();
+        if (allMovies.remove(movie))
+        {
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
+            {
+                for (Movie mov : allMovies)
+                {
+                    bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
+                    bw.newLine();
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException
     {
         MovieDAO movieDao = new MovieDAO();
-        movieDao.getAllMovies();
+        List<Movie> allMovies = movieDao.getAllMovies();
+
+        Movie oneMoveToDelete = allMovies.get(0);
+
+        movieDao.deleteMovie(oneMoveToDelete);
+
     }
 
 }
