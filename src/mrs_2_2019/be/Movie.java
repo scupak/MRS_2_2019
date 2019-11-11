@@ -5,11 +5,13 @@
  */
 package mrs_2_2019.be;
 
+import java.io.Serializable;
+
 /**
  *
  * @author pgn
  */
-public class Movie
+public class Movie implements Serializable
 {
 
     private final int id;

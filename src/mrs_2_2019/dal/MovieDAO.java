@@ -8,9 +8,13 @@ package mrs_2_2019.dal;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import mrs_2_2019.be.Movie;
@@ -66,7 +70,7 @@ public class MovieDAO
         List<Movie> allMovies = getAllMovies();
         if (allMovies.remove(movie))
         {
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
+            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
             {
                 for (Movie mov : allMovies)
                 {
@@ -77,14 +81,51 @@ public class MovieDAO
         }
     }
 
-    public static void main(String[] args) throws IOException
+    public void updateMovie(Movie movie) throws IOException
+    {
+        List<Movie> allMovies = getAllMovies();
+        if (allMovies.remove(movie))
+        {
+            allMovies.add(movie);
+            //Maybe sort list
+            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
+            {
+                for (Movie mov : allMovies)
+                {
+                    bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
+                    bw.newLine();
+                }
+            }
+        }
+    }
+
+    public void writeAllMovies(List<Movie> allMovies, String fileName) throws IOException, ClassNotFoundException
+    {
+        File listFile = new File(fileName);
+
+        try ( ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(listFile)))
+        {
+            oos.writeObject(allMovies);
+            oos.flush();
+        }
+
+        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream(listFile)))
+        {
+            List<Movie> sameListAsMovie = (List<Movie>) ois.readObject();
+            for (Movie movie : sameListAsMovie)
+            {
+                System.out.println(movie);
+            }
+        }
+
+    }
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException
     {
         MovieDAO movieDao = new MovieDAO();
         List<Movie> allMovies = movieDao.getAllMovies();
 
-        Movie oneMoveToDelete = allMovies.get(0);
-
-        movieDao.deleteMovie(oneMoveToDelete);
+        movieDao.writeAllMovies(allMovies, "data/moviesAsObjects.txt");
 
     }
 
