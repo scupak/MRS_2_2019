@@ -15,14 +15,14 @@ import mrs_2_2019.be.Movie;
  */
 public interface IMovieDao
 {
-    Movie createMovie(String title, int year);
+    Movie createMovie(String title, int year) throws DalException;
     
-    void deleteMovie(Movie movie) throws IOException;
+    void deleteMovie(Movie movie) throws DalException;
 
-    List<Movie> getAllMovies() throws IOException;
+    List<Movie> getAllMovies() throws DalException;
 
-    void updateMovie(Movie movie) throws IOException;
+    void updateMovie(Movie movie) throws DalException;
 
-    void writeAllMovies(List<Movie> allMovies, String fileName) throws IOException, ClassNotFoundException;
+    void writeAllMovies(List<Movie> allMovies, String fileName) throws DalException;
     
 }

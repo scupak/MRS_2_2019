@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mrs_2_2019.be.Movie;
 import mrs_2_2019.bll.MovieManager;
+import mrs_2_2019.dal.DalException;
 
 /**
  *
@@ -19,10 +20,10 @@ public class MovieModel
 {
 
     private ObservableList<Movie> allMovies;
-    
+
     private MovieManager movieManager;
 
-    public MovieModel() throws IOException
+    public MovieModel() throws DalException 
     {
         movieManager = new MovieManager();
         allMovies = FXCollections.observableArrayList();

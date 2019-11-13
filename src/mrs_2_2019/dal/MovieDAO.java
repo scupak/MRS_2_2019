@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,9 +32,9 @@ public class MovieDAO implements IMovieDao
     private static final String MOVIE_SOURCE = "data/movie_titles.txt";
 
     @Override
-    public List<Movie> getAllMovies() throws IOException
+    public List<Movie> getAllMovies() throws DalException
     {
-        try ( BufferedReader br = new BufferedReader(new FileReader(new File(MOVIE_SOURCE))))
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(MOVIE_SOURCE))))
         {
             List<Movie> allMovies = new ArrayList<>();
 
@@ -65,23 +66,33 @@ public class MovieDAO implements IMovieDao
                 }
             }
             return allMovies;
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DalException();
         }
     }
 
     @Override
-    public void deleteMovie(Movie movie) throws IOException
+    public void deleteMovie(Movie movie) throws DalException
     {
-        List<Movie> allMovies = getAllMovies();
-        if (allMovies.remove(movie))
+        try
         {
-            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
+            List<Movie> allMovies = getAllMovies();
+            if (allMovies.remove(movie))
             {
-                for (Movie mov : allMovies)
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
                 {
-                    bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
-                    bw.newLine();
+                    for (Movie mov : allMovies)
+                    {
+                        bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
+                        bw.newLine();
+                    }
                 }
             }
+        } catch (IOException ex)
+        {
+            throw new DalException();
         }
     }
 
@@ -93,7 +104,7 @@ public class MovieDAO implements IMovieDao
         {
             allMovies.add(movie);
             //Maybe sort list
-            try ( BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
             {
                 for (Movie mov : allMovies)
                 {
@@ -109,7 +120,7 @@ public class MovieDAO implements IMovieDao
     {
         File listFile = new File(fileName);
 
-        try ( ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(listFile)))
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(listFile)))
         {
             oos.writeObject(allMovies);
             oos.flush();
@@ -123,16 +134,15 @@ public class MovieDAO implements IMovieDao
 //                System.out.println(movie);
 //            }
 //        }
-
     }
 
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
         try
         {
             MovieDAO movieDao = new MovieDAO();
             List<Movie> allMovies = movieDao.getAllMovies();
-            
+
             movieDao.writeAllMovies(allMovies, "data/moviesAsObjects.txt");
         } catch (IOException ex)
         {
