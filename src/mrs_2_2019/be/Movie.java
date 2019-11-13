@@ -13,7 +13,8 @@ import java.io.Serializable;
  */
 public class Movie implements Serializable
 {
-
+    
+    
     private final int id;
     private String title;
     private int year;
