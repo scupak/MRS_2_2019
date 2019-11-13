@@ -48,6 +48,9 @@ public class RatingDAO
         File ratingsSource = new File(RATING_SOURCE);
         try (RandomAccessFile raf = new RandomAccessFile(ratingsSource, "rw"))
         {
+            long indexToWriteAt = getPositionForNewMovie(movieId, userId);
+            byte[] restOfDocument = new byte[(int)(raf.length() - indexToWriteAt)];
+            raf.read(restOfDocument);
             raf.seek(raf.length());
             raf.writeInt(movieId);
             raf.writeInt(userId);
@@ -116,6 +119,12 @@ public class RatingDAO
         {
             ratingdao.createRating(rating.getMovieId(), rating.getUserId(), rating.getRating());
         }
+    }
+
+    private long getPositionForNewMovie(int movieId, int userId)
+    {
+        //TODO Do this
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
