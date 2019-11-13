@@ -20,6 +20,7 @@ public class MovieModel
 {
 
     private ObservableList<Movie> allMovies;
+    
     private MovieManager movieManager;
 
     public MovieModel() throws IOException

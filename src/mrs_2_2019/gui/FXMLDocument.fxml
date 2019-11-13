@@ -9,6 +9,6 @@
     <children>
         <Label fx:id="label" layoutX="14.0" layoutY="14.0" minHeight="16" minWidth="69" text="Netflix 2.0" />
       <ListView fx:id="lstView" layoutX="14.0" layoutY="83.0" prefHeight="455.0" prefWidth="290.0" />
-      <TextField fx:id="txtMovieSearch" layoutX="14.0" layoutY="52.0" onKeyTyped="#handleMovieSearch" prefHeight="31.0" prefWidth="290.0" />
+      <TextField fx:id="txtMovieSearch" layoutX="14.0" layoutY="52.0" onKeyTyped="#handleMovieSearch" prefHeight="31.0" prefWidth="290.0" promptText="Enter search word" />
     </children>
 </AnchorPane>
