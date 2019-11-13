@@ -25,11 +25,12 @@ import mrs_2_2019.be.Movie;
  *
  * @author pgn
  */
-public class MovieDAO
+public class MovieDAO implements IMovieDao
 {
 
     private static final String MOVIE_SOURCE = "data/movie_titles.txt";
 
+    @Override
     public List<Movie> getAllMovies() throws IOException
     {
         try ( BufferedReader br = new BufferedReader(new FileReader(new File(MOVIE_SOURCE))))
@@ -67,6 +68,7 @@ public class MovieDAO
         }
     }
 
+    @Override
     public void deleteMovie(Movie movie) throws IOException
     {
         List<Movie> allMovies = getAllMovies();
@@ -83,6 +85,7 @@ public class MovieDAO
         }
     }
 
+    @Override
     public void updateMovie(Movie movie) throws IOException
     {
         List<Movie> allMovies = getAllMovies();
@@ -101,6 +104,7 @@ public class MovieDAO
         }
     }
 
+    @Override
     public void writeAllMovies(List<Movie> allMovies, String fileName) throws IOException, ClassNotFoundException
     {
         File listFile = new File(fileName);
@@ -138,6 +142,12 @@ public class MovieDAO
             Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Done");
+    }
+
+    @Override
+    public Movie createMovie(String title, int year)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

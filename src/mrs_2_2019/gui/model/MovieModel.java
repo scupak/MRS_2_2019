@@ -10,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mrs_2_2019.be.Movie;
 import mrs_2_2019.bll.MovieManager;
-import mrs_2_2019.dal.MovieDAO;
 
 /**
  *

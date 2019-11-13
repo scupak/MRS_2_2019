@@ -50,11 +50,13 @@ public class RatingDAO
         {
             long indexToWriteAt = getPositionForNewMovie(movieId, userId);
             byte[] restOfDocument = new byte[(int)(raf.length() - indexToWriteAt)];
+            raf.seek(indexToWriteAt);
             raf.read(restOfDocument);
-            raf.seek(raf.length());
+            raf.seek(indexToWriteAt);
             raf.writeInt(movieId);
             raf.writeInt(userId);
             raf.writeInt(rating);
+            raf.write(restOfDocument);
         }
     }
 
