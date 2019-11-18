@@ -90,6 +90,7 @@ public class MovieDAO
         {
             allMovies.add(movie);
             //Maybe sort list
+            allMovies.sort((Movie arg0, Movie arg1) -> arg0.getId() - arg1.getId());
             try ( BufferedWriter bw = new BufferedWriter(new FileWriter(new File(MOVIE_SOURCE))))
             {
                 for (Movie mov : allMovies)
