@@ -8,19 +8,13 @@ package mrs_2_2019.gui;
 import java.io.IOException;
 import mrs_2_2019.be.Movie;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import mrs_2_2019.dal.MovieDAO;
 import mrs_2_2019.gui.model.MovieModel;
 
 /**
@@ -47,10 +41,6 @@ public class FXMLDocumentController implements Initializable
         {
             movieModel = new MovieModel();
             lstView.setItems(movieModel.getAllMovies());
-        } catch (Exception ex)
-        {
-            System.out.println("Ooops");
-            ex.printStackTrace();
         }
     }    
 
@@ -61,7 +51,7 @@ public class FXMLDocumentController implements Initializable
         {
             String query = txtMovieSearch.getText().trim();
             movieModel.search(query);
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
             ex.printStackTrace();
         }
