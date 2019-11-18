@@ -9,12 +9,15 @@ import java.io.IOException;
 import mrs_2_2019.be.Movie;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import mrs_2_2019.dal.DalException;
 import mrs_2_2019.gui.model.MovieModel;
 
 /**
@@ -41,6 +44,9 @@ public class FXMLDocumentController implements Initializable
         {
             movieModel = new MovieModel();
             lstView.setItems(movieModel.getAllMovies());
+        } catch (DalException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
 

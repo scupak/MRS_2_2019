@@ -3,24 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mrs_2_2019.dal;
+package mrs_2_2019.dal.file;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mrs_2_2019.be.Movie;
+import mrs_2_2019.dal.DalException;
+import mrs_2_2019.dal.IMovieDao;
 
 /**
  *
@@ -97,7 +96,7 @@ public class MovieDAO implements IMovieDao
     }
 
     @Override
-    public void updateMovie(Movie movie) throws IOException
+    public void updateMovie(Movie movie) throws DalException
     {
         List<Movie> allMovies = getAllMovies();
         if (allMovies.remove(movie))
@@ -111,12 +110,16 @@ public class MovieDAO implements IMovieDao
                     bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
                     bw.newLine();
                 }
+            } catch (IOException ex)
+            {
+                Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+                throw new DalException();
             }
         }
     }
 
     @Override
-    public void writeAllMovies(List<Movie> allMovies, String fileName) throws IOException, ClassNotFoundException
+    public void writeAllMovies(List<Movie> allMovies, String fileName) throws DalException
     {
         File listFile = new File(fileName);
 
@@ -124,16 +127,12 @@ public class MovieDAO implements IMovieDao
         {
             oos.writeObject(allMovies);
             oos.flush();
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DalException();
         }
 
-//        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream(listFile)))
-//        {
-//            List<Movie> sameListAsMovie = (List<Movie>) ois.readObject();
-//            for (Movie movie : sameListAsMovie)
-//            {
-//                System.out.println(movie);
-//            }
-//        }
     }
 
     public static void main(String[] args)
@@ -142,20 +141,16 @@ public class MovieDAO implements IMovieDao
         {
             MovieDAO movieDao = new MovieDAO();
             List<Movie> allMovies = movieDao.getAllMovies();
-
             movieDao.writeAllMovies(allMovies, "data/moviesAsObjects.txt");
-        } catch (IOException ex)
-        {
-            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
+            System.out.println("Done");
+        } catch (DalException ex)
         {
             Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Done");
     }
 
     @Override
-    public Movie createMovie(String title, int year)
+    public Movie createMovie(String title, int year) throws DalException
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

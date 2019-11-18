@@ -35,7 +35,7 @@ public class MovieModel
         return allMovies;
     }
 
-    public void search(String query) throws IOException
+    public void search(String query) throws IOException, DalException
     {
         if (query.isEmpty())
         {

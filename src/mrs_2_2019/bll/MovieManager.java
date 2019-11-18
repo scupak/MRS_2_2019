@@ -5,13 +5,12 @@
  */
 package mrs_2_2019.bll;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import mrs_2_2019.be.Movie;
 import mrs_2_2019.dal.DalException;
 import mrs_2_2019.dal.IMovieDao;
-import mrs_2_2019.dal.MovieDBDAO;
+import mrs_2_2019.dal.database.MovieDBDAO;
 
 /**
  *
@@ -28,12 +27,12 @@ public class MovieManager
 
     }
 
-    public List<Movie> getAllMovies() throws DalException 
+    public List<Movie> getAllMovies() throws DalException
     {
         return movieDao.getAllMovies();
     }
 
-    public List<Movie> search(String query) throws IOException
+    public List<Movie> search(String query) throws DalException
     {
         List<Movie> searchBase = movieDao.getAllMovies();
         List<Movie> result = new ArrayList<>();
