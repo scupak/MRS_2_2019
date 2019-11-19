@@ -6,10 +6,11 @@
 package mrs_2_2019.dal.database;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import java.sql.Statement;
-import java.sql.ResultSet;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import mrs_2_2019.be.Movie;
@@ -23,7 +24,15 @@ import mrs_2_2019.dal.IMovieDao;
 public class MovieDBDAO implements IMovieDao
 {
 
-    public static void main(String[] args) throws DalException
+    private DatabaseConnector dbCon;
+    
+    public MovieDBDAO() throws IOException
+    {
+        dbCon = new DatabaseConnector();
+    }
+    
+    
+    public static void main(String[] args) throws DalException, IOException
     {
         MovieDBDAO movieDao = new MovieDBDAO();
 
@@ -38,13 +47,7 @@ public class MovieDBDAO implements IMovieDao
     @Override
     public List<Movie> getAllMovies() throws DalException
     {
-        SQLServerDataSource dataSource = new SQLServerDataSource();
-        dataSource.setDatabaseName("MRS_2019");
-        dataSource.setUser("CSe19A_40");
-        dataSource.setPassword("CSe19A_40"); //Is this good for public GitHub?
-        dataSource.setServerName("10.176.111.31");
-
-        try (Connection con = dataSource.getConnection())
+        try (Connection con = dbCon.getConnection())
         {
             String sql = "SELECT * FROM Movie;";
             Statement statement = con.createStatement();
