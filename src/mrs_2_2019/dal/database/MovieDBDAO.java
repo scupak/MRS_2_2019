@@ -37,8 +37,18 @@ public class MovieDBDAO implements IMovieDao
     {
         MovieDBDAO movieDao = new MovieDBDAO();
 
-        movieDao.createMovie("Frozen", 2014);
-        System.out.println("Done");
+        String txtInputTitle = "Frozen II";
+        int inputYear = 2019;
+
+        movieDao.createMovie(txtInputTitle, inputYear);
+        System.out.println("Done inserting");
+
+        List<Movie> allMovies = movieDao.getAllMovies();
+        for (Movie allMovy : allMovies)
+        {
+            System.out.println(allMovy + " ID: " + allMovy.getId());
+        }
+        System.out.println("Done done!!");
     }
 
     @Override
