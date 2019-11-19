@@ -97,7 +97,7 @@ public class MovieDAO implements IMovieDao
     }
 
     @Override
-    public void updateMovie(Movie movie) throws IOException
+    public void updateMovie(Movie movie) throws DalException
     {
         List<Movie> allMovies = getAllMovies();
         if (allMovies.remove(movie))
@@ -111,19 +111,25 @@ public class MovieDAO implements IMovieDao
                     bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
                     bw.newLine();
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     @Override
-    public void writeAllMovies(List<Movie> allMovies, String fileName) throws IOException, ClassNotFoundException
-    {
+    public void writeAllMovies(List<Movie> allMovies, String fileName) {
         File listFile = new File(fileName);
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(listFile)))
         {
+             
             oos.writeObject(allMovies);
             oos.flush();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 //        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream(listFile)))
@@ -136,21 +142,11 @@ public class MovieDAO implements IMovieDao
 //        }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws DalException
     {
-        try
-        {
-            MovieDAO movieDao = new MovieDAO();
-            List<Movie> allMovies = movieDao.getAllMovies();
-
-            movieDao.writeAllMovies(allMovies, "data/moviesAsObjects.txt");
-        } catch (IOException ex)
-        {
-            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        MovieDAO movieDao = new MovieDAO();
+        List<Movie> allMovies = movieDao.getAllMovies();
+        movieDao.writeAllMovies(allMovies, "data/moviesAsObjects.txt");
         System.out.println("Done");
     }
 
