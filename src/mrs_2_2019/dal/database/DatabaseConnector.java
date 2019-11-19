@@ -31,6 +31,8 @@ public class DatabaseConnector
         dataSource.setUser(props.getProperty("user"));
         dataSource.setPassword(props.getProperty("password"));        
         dataSource.setServerName(props.getProperty("server"));
+        
+        System.out.println(props.getProperty("database") + "\n"+ props.getProperty("user")+ "\n" + props.getProperty("password")+ "\n" + props.getProperty("server") );
     }
     
     public Connection getConnection() throws SQLServerException

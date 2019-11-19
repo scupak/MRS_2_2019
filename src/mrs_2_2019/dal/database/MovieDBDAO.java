@@ -56,7 +56,7 @@ public class MovieDBDAO implements IMovieDao
     {
         try (Connection con = dbCon.getConnection())
         {
-            String sql = "SELECT * FROM Movie;";
+            String sql = "SELECT * FROM Movies;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             ArrayList<Movie> allMovies = new ArrayList<>();
@@ -99,7 +99,7 @@ public class MovieDBDAO implements IMovieDao
     {
         try (Connection con = dbCon.getConnection())
         {
-            String sql = "INSERT INTO movie VALUES ('" + title + "'," + year + ");";
+            String sql = "INSERT INTO Movies VALUES ('" + title + "'," + year + ");";
             Statement st = con.createStatement();
             int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (affectedRows == 1)
