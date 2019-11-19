@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mrs_2_2019.be.Movie;
 import mrs_2_2019.dal.DalException;
 import mrs_2_2019.dal.IMovieDao;
@@ -25,23 +27,28 @@ public class MovieDBDAO implements IMovieDao
 {
 
     private DatabaseConnector dbCon;
-    
-    public MovieDBDAO() throws IOException
+
+    public MovieDBDAO() throws Exception
     {
         dbCon = new DatabaseConnector();
     }
-    
-    
-    public static void main(String[] args) throws DalException, IOException
+
+    public static void main(String[] args) throws Exception
     {
         MovieDBDAO movieDao = new MovieDBDAO();
+
+        String txtInputTitle = "Frozen II";
+        int inputYear = 2019;
+
+        movieDao.createMovie(txtInputTitle, inputYear);
+        System.out.println("Done inserting");
 
         List<Movie> allMovies = movieDao.getAllMovies();
         for (Movie allMovy : allMovies)
         {
-            System.out.println(allMovy);
+            System.out.println(allMovy + " ID: " + allMovy.getId());
         }
-
+        System.out.println("Done done!!");
     }
 
     @Override
@@ -90,7 +97,27 @@ public class MovieDBDAO implements IMovieDao
     @Override
     public Movie createMovie(String title, int year) throws DalException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try (Connection con = dbCon.getConnection())
+        {
+            String sql = "INSERT INTO movie VALUES ('" + title + "'," + year + ");";
+            Statement st = con.createStatement();
+            int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            if (affectedRows == 1)
+            {
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) // <-- Remember to do this!!
+                {
+                    int id = rs.getInt(1);
+                    Movie mov = new Movie(id, title, year);
+                    return mov;
+                }
+            }
+            throw new DalException();
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new DalException();
+        }
     }
 
 }
