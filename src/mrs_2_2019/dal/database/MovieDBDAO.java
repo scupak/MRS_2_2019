@@ -35,12 +35,14 @@ public class MovieDBDAO implements IMovieDao
 
     public static void main(String[] args) throws Exception
     {
+        try
+        {
         MovieDBDAO movieDao = new MovieDBDAO();
 
-        String txtInputTitle = "Frozen II";
+        String txtInputTitle = "Frozen II',1983);DELETE FROM movie;--";
         int inputYear = 2019;
 
-        movieDao.createMovie(txtInputTitle, inputYear);
+        Movie movie = movieDao.createMovie(txtInputTitle, inputYear);
         System.out.println("Done inserting");
 
         List<Movie> allMovies = movieDao.getAllMovies();
@@ -49,6 +51,11 @@ public class MovieDBDAO implements IMovieDao
             System.out.println(allMovy + " ID: " + allMovy.getId());
         }
         System.out.println("Done done!!");
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+        }
     }
 
     @Override
