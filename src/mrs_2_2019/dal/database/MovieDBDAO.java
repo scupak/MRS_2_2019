@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import mrs_2_2019.be.Movie;
 import mrs_2_2019.dal.DalException;
 import mrs_2_2019.dal.IMovieDao;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -38,12 +39,16 @@ public class MovieDBDAO implements IMovieDao
         try
         {
         MovieDBDAO movieDao = new MovieDBDAO();
-
-        String txtInputTitle = "Frozen II',1983);DELETE FROM movie;--";
+/*
+        String txtInputTitle = "Frozen II',1983);DELETE FROM Movies;--";
         int inputYear = 2019;
 
         Movie movie = movieDao.createMovie(txtInputTitle, inputYear);
         System.out.println("Done inserting");
+        */
+        
+        movieDao.deleteMovie(new Movie(4, "lol", 1999));
+        
 
         List<Movie> allMovies = movieDao.getAllMovies();
         for (Movie allMovy : allMovies)
@@ -56,6 +61,8 @@ public class MovieDBDAO implements IMovieDao
         {
             t.printStackTrace();
         }
+        
+        
     }
 
     @Override
@@ -86,7 +93,24 @@ public class MovieDBDAO implements IMovieDao
     @Override
     public void deleteMovie(Movie movie) throws DalException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                try (Connection con = dbCon.getConnection())
+        {
+            String sql = "DELETE FROM Movies WHERE ID =" + movie.getId();
+            Statement st = con.createStatement();
+            int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            
+            if (affectedRows == 1)
+            {
+                
+            }
+            else{
+            throw new DalException();
+            }
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new DalException();
+        }
     }
 
     @Override
@@ -106,8 +130,13 @@ public class MovieDBDAO implements IMovieDao
     {
         try (Connection con = dbCon.getConnection())
         {
-            String sql = "INSERT INTO Movies VALUES ('" + title + "'," + year + ");";
-            Statement st = con.createStatement();
+            String sql = "INSERT INTO Movies VALUES (?,?);";
+            PreparedStatement st = con.prepareStatement(sql);
+            
+            
+            
+            
+            
             int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (affectedRows == 1)
             {
