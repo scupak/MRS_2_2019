@@ -5,9 +5,8 @@
  */
 package mrs_2_2019.dal.database;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -38,26 +37,21 @@ public class MovieDBDAO implements IMovieDao
     {
         try
         {
-        MovieDBDAO movieDao = new MovieDBDAO();
-/*
-        String txtInputTitle = "Frozen II',1983);DELETE FROM Movies;--";
-        int inputYear = 2019;
+            MovieDBDAO movieDao = new MovieDBDAO();
 
-        Movie movie = movieDao.createMovie(txtInputTitle, inputYear);
-        System.out.println("Done inserting");
-        */
-        
-        movieDao.deleteMovie(new Movie(4, "lol", 1999));
-        
+            String txtInputTitle = "Frozen II',1986);DELETE FROM movie;--";
+            int inputYear = 2019;
 
-        List<Movie> allMovies = movieDao.getAllMovies();
-        for (Movie allMovy : allMovies)
-        {
-            System.out.println(allMovy + " ID: " + allMovy.getId());
-        }
-        System.out.println("Done done!!");
-        }
-        catch (Throwable t)
+            Movie movie = movieDao.createMovie(txtInputTitle, inputYear);
+            System.out.println("Done inserting");
+
+            List<Movie> allMovies = movieDao.getAllMovies();
+            for (Movie allMovy : allMovies)
+            {
+                System.out.println(allMovy + " ID: " + allMovy.getId());
+            }
+            System.out.println("Done done!!");
+        } catch (Throwable t)
         {
             t.printStackTrace();
         }
@@ -93,18 +87,16 @@ public class MovieDBDAO implements IMovieDao
     @Override
     public void deleteMovie(Movie movie) throws DalException
     {
-                try (Connection con = dbCon.getConnection())
+        try (Connection con = dbCon.getConnection())
         {
-            String sql = "DELETE FROM Movies WHERE ID =" + movie.getId();
-            Statement st = con.createStatement();
-            int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-            
-            if (affectedRows == 1)
+            int id = movie.getId();
+            String sql = "DELETE FROM movie WHERE id=?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows != 1)
             {
-                
-            }
-            else{
-            throw new DalException();
+                throw new DalException();
             }
         } catch (SQLException ex)
         {
@@ -130,17 +122,14 @@ public class MovieDBDAO implements IMovieDao
     {
         try (Connection con = dbCon.getConnection())
         {
-            String sql = "INSERT INTO Movies VALUES (?,?);";
-            PreparedStatement st = con.prepareStatement(sql);
-            
-            
-            
-            
-            
-            int affectedRows = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql = "INSERT INTO movie VALUES (?,?);";
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, title);
+            ps.setInt(2, year);
+            int affectedRows = ps.executeUpdate();
             if (affectedRows == 1)
             {
-                ResultSet rs = st.getGeneratedKeys();
+                ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) // <-- Remember to do this!!
                 {
                     int id = rs.getInt(1);
@@ -155,5 +144,4 @@ public class MovieDBDAO implements IMovieDao
             throw new DalException();
         }
     }
-
 }

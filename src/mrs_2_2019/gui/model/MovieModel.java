@@ -23,7 +23,7 @@ public class MovieModel
 
     private MovieManager movieManager;
 
-    public MovieModel() throws DalException 
+    public MovieModel() throws DalException, Exception 
     {
         movieManager = new MovieManager();
         allMovies = FXCollections.observableArrayList();

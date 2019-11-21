@@ -26,17 +26,16 @@ import mrs_2_2019.gui.model.MovieModel;
  */
 public class FXMLDocumentController implements Initializable
 {
+
     private MovieModel movieModel;
-    
+
     @FXML
     private Label label;
     @FXML
     private ListView<Movie> lstView;
     @FXML
     private TextField txtMovieSearch;
-    
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
@@ -44,11 +43,11 @@ public class FXMLDocumentController implements Initializable
         {
             movieModel = new MovieModel();
             lstView.setItems(movieModel.getAllMovies());
-        } catch (DalException ex)
+        } catch (Exception ex)
         {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
 
     @FXML
     private void handleMovieSearch(KeyEvent event)
@@ -62,5 +61,5 @@ public class FXMLDocumentController implements Initializable
             ex.printStackTrace();
         }
     }
-    
+
 }

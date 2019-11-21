@@ -21,7 +21,7 @@ public class MovieManager
 
     private IMovieDao movieDao;
 
-    public MovieManager()
+    public MovieManager() throws Exception
     {
         movieDao = new MovieDBDAO();
 
